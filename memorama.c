@@ -49,7 +49,7 @@ int main() {
     char* game = GenerateCadena(cadena, 0, 0, 'A');
     char player1[50];
     char player2[50];
-    
+    char initialTable[] = "\n| 1 | 2 | 3 | 4\n| 5 | 6 | 7 | 8\n| 9 |10 |11 |12\n|13 |14 |15 |16 ";
     printf("\nEntre el nombre del jugador 1: ");
     scanf("%49s", player1); 
     
@@ -67,7 +67,7 @@ int main() {
 
     printf("\n%s\n", game);
     printf("+---+---+---+---+  JUEGO DEL CONCENTRESE        SCORE\n| 1 | 2 | 3 | 4 |  Nombre jugador 01: %s%s0\n+---+---+---+---+  Nombre jugador 02: %s%s0\n", player1, espacios1, player2, espacios2);
-    printf("| 5 | 6 | 7 | 8 |\n+---+---+---+---+\n| 9 |10 |11 |12 |\n+---+---+---+---+\n|13 |14 |15 |16 |\n+---+---+---+---+\n");
+    printf("| 5 | 6 | 7 | 8 |\n+---+---+---+---+  Juega: %s\n| 9 |10 |11 |12 |  Status:\n+---+---+---+---+\n|13 |14 |15 |16 |\n+---+---+---+---+\n", player1);
     
     return 0;
 }
