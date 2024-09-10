@@ -67,7 +67,7 @@ int main() {
 
     printf("\n%s\n", game);
     printf("+---+---+---+---+  JUEGO DEL CONCENTRESE        SCORE\n| 1 | 2 | 3 | 4 |  Nombre jugador 01: %s%s0\n+---+---+---+---+  Nombre jugador 02: %s%s0\n", player1, espacios1, player2, espacios2);
-    printf("| 5 | 6 | 7 | 8 |\n+---+---+---+---+\n| 9 | 10| 11| 12|\n+---+---+---+---+\n| 13| 14| 15| 16|\n+---+---+---+---+\n");
+    printf("| 5 | 6 | 7 | 8 |\n+---+---+---+---+\n| 9 |10 |11 |12 |\n+---+---+---+---+\n|13 |14 |15 |16 |\n+---+---+---+---+\n");
     
     return 0;
 }
