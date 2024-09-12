@@ -78,10 +78,10 @@ void PrintTable(char table[], char player1[], char player2[], char player[], cha
     char espacios2[50];
     CreateString(espacios1, 0, nEspacios - longitud1, ' ');
     CreateString(espacios2, 0, nEspacios - longitud2, ' ');
-
+    printf("\n%s\n", table);
     printf("\n+---+---+---+---+  JUEGO DEL CONCENTRESE        SCORE");
     printf("%.16s |  Nombre jugador 01: %s%s0\n", table, player1, espacios1);
-    
+    printf("+---+---+---+---+  Nombre jugador 02: %s%s0\n", player2, espacios2);
 }
 
 
