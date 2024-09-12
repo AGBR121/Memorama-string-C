@@ -70,19 +70,20 @@ void ChangeChar(char str[], int pos, char newChar) {
     }
 }
 
-void PrintTable(char table[], char player1[], char player2[], char player[], char winner1[], char winner2[], char status[]){
+void PrintTable(char table[], char player1[], char player2[], char player[], char winner1[], char winner2[], char status[]) {
     int longitud1 = strlen(player1);
     int longitud2 = strlen(player2);
-    int nEspacios = 12; 
-    
-    char espacios1[50]; 
-    char espacios2[50]; 
+    int nEspacios = 12;
+    char espacios1[50];
+    char espacios2[50];
     CreateString(espacios1, 0, nEspacios - longitud1, ' ');
     CreateString(espacios2, 0, nEspacios - longitud2, ' ');
-    printf("\n+---+---+---+---+  JUEGO DEL CONCENTRESE        SCORE%.15s |  Nombre jugador 01: %s%s0\n+---+---+---+---+  Nombre jugador 02: %s%s0",table, player1, espacios1, player2, espacios2);
-    printf("%.15s+---+---+---+---+  Juega: %s%.15s |  Status:\n+---+---+---+---+%.15s |\n+---+---+---+---+\n",table[16], player, table[31], table[48]);
 
+    printf("\n+---+---+---+---+  JUEGO DEL CONCENTRESE        SCORE");
+    printf("%.16s |  Nombre jugador 01: %s%s0\n", table, player1, espacios1);
+    
 }
+
 
 void CheckMove(char* actualTable, char* newTable, int position, int selection1, int turn, char* player1, char* player2, int score1, int score2, int counter) {
     if (isdigit(actualTable[position])) {
