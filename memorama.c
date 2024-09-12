@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 char* CreateString(char cadena[], int counter, int number, char letter) {
     if (counter < number) {
@@ -11,6 +12,16 @@ char* CreateString(char cadena[], int counter, int number, char letter) {
         cadena[counter] = '\0'; 
         return cadena;
     }
+}
+
+int EndGame(const char* str, int pos) {
+    if (pos == 64) {
+        return 1;  
+    }
+    if (isdigit(str[pos])) {
+        return 0; 
+    }
+    return EndGame(str, pos + 1);
 }
 
 char* GenerateCadena(char cadena[], int counter, int counter2, int letter) {
@@ -36,10 +47,39 @@ char* GenerateCadena(char cadena[], int counter, int counter2, int letter) {
     }
 }
 
-void Game(int turn, char game[]) {
-    int num = 0;
-    printf("Escoja la casilla: ");
-    scanf("%i", &num);
+int Desicion(char option) {
+    if (option == 's' || option == 'S') {
+        return 1; 
+    } else {
+        return 0;
+    }
+}
+
+void ChangeChar(char str[], int pos, char newChar) {
+    int length = strlen(str); 
+
+    if (pos < length) {
+        if (pos < 39) {
+            str[pos] = newChar;
+        } else {
+            str[pos - 1] = ' ';
+            str[pos] = newChar;
+        }
+    }
+}
+
+void Game(int turn,char stringTable[], char initialTable[], char actualTable[], char player1[], char player2[], int score1, int score2, int selection, int coounter) {
+    char newTable[]= "";
+    int position = 0;
+    printf("Entre número casilla 0%i: ", turn);
+    scanf("%i", &position);
+
+    strcpy(newTable, actualTable);
+    if (isdigit(actualTable[position])) {
+        int newCharIndex = (position + 1) / 4 - 1; 
+        char newChar = stringTable[newCharIndex];
+        ChangeChar(newTable, position, newChar);
+    }
 }
 
 int main() {
