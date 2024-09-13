@@ -78,14 +78,13 @@ void PrintTable(char table[], char player1[], char player2[], char player[], cha
     char espacios2[50];
     CreateString(espacios1, 0, nEspacios - longitud1, ' ');
     CreateString(espacios2, 0, nEspacios - longitud2, ' ');
-    printf("\n%s\n", table);
     printf("\n+---+---+---+---+  JUEGO DEL CONCENTRESE        SCORE");
     printf("%.16s |  Nombre jugador 01: %s%s0\n", table, player1, espacios1);
     printf("+---+---+---+---+  Nombre jugador 02: %s%s0\n", player2, espacios2);
 }
 
 
-void CheckMove(char* actualTable, char* newTable, int position, int selection1, int turn, char* player1, char* player2, int score1, int score2, int counter) {
+void CheckMove(char* stringTable, char* actualTable, char* newTable, int position, int selection1, int turn, char* player1, char* player2, int score1, int score2, int counter) {
     if (isdigit(actualTable[position])) {
         if (newTable[position] == newTable[selection1]) {
             PrintTable(newTable, player1, player2, (turn == 1) ? player1 : player2, 
@@ -95,7 +94,8 @@ void CheckMove(char* actualTable, char* newTable, int position, int selection1, 
             if (EndGame(newTable, 0)) {
                 return;
             } else {
-                Game(turn, newTable, newTable, actualTable, player1, player2, 
+                printf("\n%s\n", newTable);
+                Game(turn, stringTable, newTable, newTable, player1, player2, 
                      (turn == 1) ? score1 + 1 : score1, (turn == 2) ? score2 + 1 : score2, 0, 1);
             }
         } else {
@@ -106,11 +106,11 @@ void CheckMove(char* actualTable, char* newTable, int position, int selection1, 
                 scanf(" %c", &option);
                 if (Desicion(option)) {
                     PrintTable(newTable, player1, player2, (turn == 1) ? player1 : player2, "0", "0", " ");
-                    Game(turn == 1 ? 2 : 1, newTable, newTable, actualTable, player1, player2, score1, score2, 0, 1);
+                    Game(turn == 1 ? 2 : 1, stringTable, newTable, actualTable, player1, player2, score1, score2, 0, 1);
                 }
             } else {
                 PrintTable(newTable, player1, player2, (turn == 1) ? player1 : player2, "0", "0", " ");
-                Game(turn, newTable, newTable, actualTable, player1, player2, score1, score2, position, counter + 1);
+                Game(turn, stringTable, newTable, newTable, player1, player2, score1, score2, position, counter + 1);
             }
         }
     } else {
@@ -119,7 +119,7 @@ void CheckMove(char* actualTable, char* newTable, int position, int selection1, 
         } else {
             printf("Error, casilla ya jugada\n");
             PrintTable(newTable, player1, player2, (turn == 1) ? player1 : player2, "0", "0", " ");
-            Game(turn, newTable, newTable, actualTable, player1, player2, score1, score2, selection1, counter);
+            Game(turn, stringTable, newTable, newTable, player1, player2, score1, score2, selection1, counter);
         }
     }
 }
@@ -135,9 +135,11 @@ void Game(int turn, char stringTable[], char initialTable[], char actualTable[],
     if (isdigit(actualTable[position])) {
         int newCharIndex = (position + 1) / 4 - 1; 
         char newChar = stringTable[newCharIndex];
+        printf("\n%i\n%c\n%i", position, newChar, newCharIndex);
+        printf("\n%s\n", stringTable);
         ChangeChar(newTable, position, newChar);
     }
-    CheckMove(actualTable, newTable, position, selection, turn, player1, player2, score1, score2, counter);
+    CheckMove(stringTable, newTable, newTable, position, selection, turn, player1, player2, score1, score2, counter);
 }
 
 
