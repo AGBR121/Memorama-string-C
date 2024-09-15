@@ -58,17 +58,15 @@ int Desicion(char option) {
 }
 
 void ChangeChar(char str[], int pos, char newChar) {
-    int length = strlen(str); 
-
-    if (pos < length) {
-        if (pos < 39) {
-            str[pos] = newChar;
-        } else {
-            str[pos - 1] = ' ';
-            str[pos] = newChar;
-        }
+    if (pos < 9) {
+        str[pos] = newChar;
+    } else {
+        int index = (pos - 9) * 2 + 9;
+        str[index] = ' ';
+        str[index + 1] = newChar;
     }
 }
+
 
 void PrintTable(char table[], char player1[], char player2[], char player[], char winner1[], char winner2[], char status[]) {
     int longitud1 = strlen(player1);
@@ -76,15 +74,24 @@ void PrintTable(char table[], char player1[], char player2[], char player[], cha
     int nEspacios = 12;
     char espacios1[50];
     char espacios2[50];
-    CreateString(espacios1, 0, nEspacios - longitud1, ' ');
-    CreateString(espacios2, 0, nEspacios - longitud2, ' ');
-    printf("\n+---+---+---+---+  JUEGO DEL CONCENTRESE        SCORE");
-    printf("%.16s |  Nombre jugador 01: %s%s0\n", table, player1, espacios1);
+
+    CreateString(espacios1, 0, nEspacios - longitud1, ' '); 
+    CreateString(espacios2, 0, nEspacios - longitud2, ' '); 
+
+    printf("\n+---+---+---+---+  JUEGO DEL CONCENTRESE        SCORE\n");
+    printf("| %c | %c | %c | %c |  Nombre jugador 01: %s%s0\n", &table[0], &table[1], &table[2], &table[3], player1, espacios1);
     printf("+---+---+---+---+  Nombre jugador 02: %s%s0\n", player2, espacios2);
+    printf("| %c | %c | %c | %c |\n", &table[4], &table[5], &table[6], &table[7]);
+    printf("+---+---+---+---+  Juega: %s\n", player);
+    printf("| %c |%c%c |%c%c |%c%c |  Status: %s\n", &table[8], &table[9], &table[10], &table[11], &table[12], &table[13], &table[14], &table[15], status);
+    printf("+---+---+---+---+\n");
+    printf("|%c%c |%c%c |%c%c |%c%c |\n", &table[16], &table[17], &table[18], &table[19], &table[20], &table[21], &table[22], &table[23]);
+    printf("+---+---+---+---+\n");
 }
 
 
-void CheckMove(char* stringTable, char* actualTable, char* newTable, int position, int selection1, int turn, char* player1, char* player2, int score1, int score2, int counter) {
+
+void CheckMove(int turn,char newTable[], char stringTable[], char initialTable[], char actualTable[], char player1[], char player2[], int score1, int score2, int selection, int counter, int position, int selection1) {
     if (isdigit(actualTable[position])) {
         if (newTable[position] == newTable[selection1]) {
             PrintTable(newTable, player1, player2, (turn == 1) ? player1 : player2, 
@@ -124,22 +131,24 @@ void CheckMove(char* stringTable, char* actualTable, char* newTable, int positio
     }
 }
 
-
 void Game(int turn, char stringTable[], char initialTable[], char actualTable[], char player1[], char player2[], int score1, int score2, int selection, int counter) {
     char newTable[100];
     int position = 0;
     printf("Entre número casilla 0%i: ", turn);
     scanf("%i", &position);
-    position = (position * 4) - 1;
     strcpy(newTable, actualTable);
     if (isdigit(actualTable[position])) {
-        int newCharIndex = (position + 1) / 4 - 1; 
-        char newChar = stringTable[newCharIndex];
-        printf("\n%i\n%c\n%i", position, newChar, newCharIndex);
+        char newChar = stringTable[position];
+        printf("\n%i\n%c\n%i", position, newChar, position);
         printf("\n%s\n", stringTable);
         ChangeChar(newTable, position, newChar);
     }
-    CheckMove(stringTable, newTable, newTable, position, selection, turn, player1, player2, score1, score2, counter);
+    if(position > 0 &&position < 17){
+            CheckMove(turn, newTable, stringTable, initialTable, actualTable, player1, player2, score1, score2, selection, counter, position, selection);
+    }else{
+        printf("\nSelección Invalida\n");
+        Game(turn, stringTable, initialTable, actualTable, player1, player2, score1, score2, selection, counter);
+    }
 }
 
 
@@ -150,7 +159,7 @@ int main() {
     char* game = GenerateCadena(cadena, 0, 0, 'A');
     char player1[50];
     char player2[50];
-    char initialTable[] = "\n| 1 | 2 | 3 | 4\n| 5 | 6 | 7 | 8\n| 9 |10 |11 |12\n|13 |14 |15 |16 ";
+    char initialTable[] = "12345678910111213141516";
     printf("\nEntre el nombre del jugador 1: ");
     scanf("%49s", player1); 
     
