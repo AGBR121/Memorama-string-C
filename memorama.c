@@ -4,8 +4,6 @@
 #include <time.h>
 #include <ctype.h>
 
-void Game(int turn,char stringTable[], char initialTable[], char actualTable[], char player1[], char player2[], int score1, int score2, int selection, int counter);
-
 char* CreateString(char cadena[], int counter, int number, char letter) {
     if (counter < number) {
         cadena[counter] = letter;
@@ -52,7 +50,7 @@ void ChangeChar(char str[], int pos, char newChar) {
 }
 
 
-void PrintTable(char table[], char player1[], char player2[], char player[], char winner1[], char winner2[], char status[]) {
+void PrintTable(char table[], char player1[], char player2[], char player[], int score1, int score2, char status[]) {
     int longitud1 = strlen(player1);
     int longitud2 = strlen(player2);
     int nEspacios = 12;
@@ -80,6 +78,15 @@ int main() {
     char player1[50];
     char player2[50];
     char initialTable[] = "12345678910111213141516";
+    char auxiliarTable[] = "12345678910111213141516";
+    int turn = 1;
+    int counter = 1;
+    int score1 = 0;
+    int score2 = 0;
+    int respuesta = 0;
+    int auxiliarRespuesta = 0;
+    int respuestaAnterior = 0;
+
     printf("\nEntre el nombre del jugador 1: ");
     scanf("%49s", player1); 
     
@@ -89,14 +96,57 @@ int main() {
     int longitud1 = strlen(player1);
     int longitud2 = strlen(player2);
     int nEspacios = 16; 
-    
+    char answer = 's';
     char espacios1[50]; 
     char espacios2[50]; 
     CreateString(espacios1, 0, nEspacios - longitud1, ' ');
     CreateString(espacios2, 0, nEspacios - longitud2, ' ');
 
     printf("\n%s\n", game);
-    PrintTable(initialTable, player1, player2, player1, "", "", "");
-    //Game(1, game, initialTable, initialTable, player1, player2, 0, 0, 0, 1);
+    PrintTable(initialTable, player1, player2, player1, score1, score2, "");
+    
+    while(score1+score2 != 8){
+        printf("\nEntre número casilla 0%i: ", turn);
+        scanf("%i", &respuesta);
+        respuesta --;
+        auxiliarRespuesta = respuesta;
+        if(respuesta > 15 || respuesta < 0){
+            printf("\nCasila inválida");
+        }else{
+            if(respuesta > 8){
+                respuesta = (respuesta-8)*2 + 8;
+            }
+            if(!isdigit(auxiliarTable[respuesta])){
+                printf("\nError casilla ya jugada");
+            }else{
+                if(auxiliarRespuesta > 8){
+                    auxiliarTable[respuesta] = game[auxiliarRespuesta];
+                    auxiliarTable[respuesta-1] = ' ';
+                }else{
+                    auxiliarTable[respuesta] = game[auxiliarRespuesta];
+                }
+                
+                if(counter % 2 == 0){
+                    score1 = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior] && turn == 1) ? score1++ : score1;
+                    score2 = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior] && turn == 2) ? score2++ : score2;
+                    PrintTable(auxiliarTable, player1, player2, (turn == 1) ? player1 : player2, (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior] && turn == 1) ? score1+1 : score1, (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior] && turn == 2) ? score2++ : score2, (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior]) ? "ADIVINO" : "PERDIO" );
+                    turn = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior]) ? turn : (turn == 1) ? 2 : 1;
+                    initialTable[respuesta] = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior]) ? auxiliarTable[respuesta] : initialTable[respuesta];
+                    initialTable[respuestaAnterior] = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior]) ? auxiliarTable[respuestaAnterior] : initialTable[respuestaAnterior];
+                    counter = 1;
+                    printf("Desea continuar(s/n): ");
+                    scanf(" %c", &answer);
+                    if (tolower(answer) != 's') {
+                    break;
+                   }
+                }else{
+                    PrintTable(auxiliarTable, player1, player2, player1, score1, score2, "");
+                    respuestaAnterior = respuesta;
+                    counter++;
+                }
+            }
+        }
+    }
+
     return 0;
 }
