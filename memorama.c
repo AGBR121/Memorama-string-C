@@ -1,3 +1,13 @@
+/*
+- Autor: Ing(c) Burbano Rodriguez Angel Gabriel
+- Nombre del lenguaje utilizado: C
+- Versión del lenguaje utilizado: C11
+- Versión del compilador utilizado: GCC 6.3.0
+- Versión del S.O: Windows 10 Pro Versión 22H2
+- Descripcion del programa: Este programa consiste en un algoritmo para jugar el juego del memorama con solo string.
+- Salvedad: si se ingresa un dato que no sea un entero, no garantizamos los resultados.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,6 +21,22 @@ char* CreateString(char cadena[], int counter, int number, char letter) {
     } else {
         cadena[counter] = '\0'; 
         return cadena;
+    }
+}
+
+int Evaluate(char answer){
+    char newAnswer = ' ';
+    if(tolower(answer) != 's' || tolower(answer) != 'n'){
+        printf("\nOpción inválida\n");
+        printf("Desea continuar(s/n): ");
+        scanf(" %c", &newAnswer);
+        Evaluate(newAnswer);
+    }else{
+        if(tolower(answer) == 's'){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 }
 
@@ -60,8 +86,8 @@ void PrintTable(char table[], char player1[], char player2[], char player[], int
     CreateString(espacios1, 0, nEspacios - longitud1, ' '); 
     CreateString(espacios2, 0, nEspacios - longitud2, ' ');
     printf("\n+---+---+---+---+  JUEGO DEL CONCENTRESE        SCORE\n");
-    printf("| %c | %c | %c | %c |  Nombre jugador 01: %s%s0\n", table[0], table[1], table[2], table[3], player1, espacios1);
-    printf("+---+---+---+---+  Nombre jugador 02: %s%s0\n", player2, espacios2);
+    printf("| %c | %c | %c | %c |  Nombre jugador 01: %s%s%i\n", table[0], table[1], table[2], table[3], player1, espacios1, score1);
+    printf("+---+---+---+---+  Nombre jugador 02: %s%s%i\n", player2, espacios2, score2);
     printf("| %c | %c | %c | %c |\n", table[4], table[5], table[6], table[7]);
     printf("+---+---+---+---+  Juega: %s\n", player);
     printf("| %c |%c%c |%c%c |%c%c |  Status: %s\n", table[8], table[9], table[10], table[11], table[12], table[13], table[14], status);
@@ -102,7 +128,6 @@ int main() {
     CreateString(espacios1, 0, nEspacios - longitud1, ' ');
     CreateString(espacios2, 0, nEspacios - longitud2, ' ');
 
-    printf("\n%s\n", game);
     PrintTable(initialTable, player1, player2, player1, score1, score2, "");
     
     while(score1+score2 != 8){
@@ -127,26 +152,39 @@ int main() {
                 }
                 
                 if(counter % 2 == 0){
-                    score1 = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior] && turn == 1) ? score1++ : score1;
-                    score2 = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior] && turn == 2) ? score2++ : score2;
-                    PrintTable(auxiliarTable, player1, player2, (turn == 1) ? player1 : player2, (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior] && turn == 1) ? score1+1 : score1, (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior] && turn == 2) ? score2++ : score2, (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior]) ? "ADIVINO" : "PERDIO" );
+                    score1 = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior] && turn == 1) ? score1+1 : score1;
+                    score2 = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior] && turn == 2) ? score2+1 : score2;
+                    PrintTable(auxiliarTable, player1, player2, (turn == 1) ? player1 : player2, score1, score2, (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior]) ? "ADIVINO" : "PERDIO" );
                     turn = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior]) ? turn : (turn == 1) ? 2 : 1;
-                    initialTable[respuesta] = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior]) ? auxiliarTable[respuesta] : initialTable[respuesta];
-                    initialTable[respuestaAnterior] = (auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior]) ? auxiliarTable[respuestaAnterior] : initialTable[respuestaAnterior];
+                    if(auxiliarTable[respuesta] == auxiliarTable[respuestaAnterior]){
+                        strcpy(initialTable, auxiliarTable);
+                    }
+                    if(score1+score2 != 8){
+                    strcpy(auxiliarTable, initialTable);
                     counter = 1;
                     printf("Desea continuar(s/n): ");
                     scanf(" %c", &answer);
-                    if (tolower(answer) != 's') {
+                    if (Evaluate(answer)) {
                     break;
                    }
+                   PrintTable(initialTable, player1, player2, (turn == 1) ? player1 : player2, score1, score2, "");
+                   }
                 }else{
-                    PrintTable(auxiliarTable, player1, player2, player1, score1, score2, "");
+                    PrintTable(auxiliarTable, player1, player2, (turn == 1) ? player1 : player2, score1, score2, "");
                     respuestaAnterior = respuesta;
                     counter++;
                 }
             }
         }
     }
-
+    if (tolower(answer) == 's') {
+        if(score1 < score2){
+            printf("\nJugador 2 ha ganado!");
+        }else if(score1 > score2){
+            printf("\nJugador 1 ha ganado!");
+        }else{
+            printf("\nEmpate");
+        }
+    }
     return 0;
 }
