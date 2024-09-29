@@ -81,8 +81,8 @@ void PrintTable(char table[], char player1[], char player2[], char player[], int
 }
 
 int main() {
+    system("cls");
     srand(time(NULL));
-
     char cadena[] = "aaaaaaaaaaaaaaaa";  
     char* game = GenerateCadena(cadena, 0, 0, 'A');
     char player1[50];
