@@ -24,22 +24,6 @@ char* CreateString(char cadena[], int counter, int number, char letter) {
     }
 }
 
-int Evaluate(char answer){
-    char newAnswer = ' ';
-    if(tolower(answer) != 's' || tolower(answer) != 'n'){
-        printf("\nOpción inválida\n");
-        printf("Desea continuar(s/n): ");
-        scanf(" %c", &newAnswer);
-        Evaluate(newAnswer);
-    }else{
-        if(tolower(answer) == 's'){
-            return 1;
-        }else{
-            return 0;
-        }
-    }
-}
-
 
 char* GenerateCadena(char cadena[], int counter, int counter2, int letter) {
     int num = rand() % 16;  
@@ -164,7 +148,7 @@ int main() {
                     counter = 1;
                     printf("Desea continuar(s/n): ");
                     scanf(" %c", &answer);
-                    if (Evaluate(answer)) {
+                    if (tolower(answer) != 's') {
                     break;
                    }
                    PrintTable(initialTable, player1, player2, (turn == 1) ? player1 : player2, score1, score2, "");
